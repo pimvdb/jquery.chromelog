@@ -1,4 +1,6 @@
 (function($) {
+  "use strict";
+
   var rstack = /^    at (?:.* \()?(.*):(.*?):.*?\)?$/;
 
   var fix = function(x, length) {
@@ -53,13 +55,13 @@
     if(min >= max) {
       min = max = 0;
     }
+
     var $this_partial = $this.slice(min, max);
 
     var headers = [ printf("jQuery[%]", length) ];
 
     if(tag != null) {
       headers[0] = printf("%: %", tag, headers[0]);
-
       history[tag] = $this;
     }
 
@@ -86,16 +88,16 @@
         if(min !== 0) {
           toLog.unshift( printf("(+%)", min) );
         }
-        toLog.unshift("[");
-
-        if(max < length) {
+        if(max !== length) {
           toLog.push( printf("(+%)", length - max) );
         }
-        toLog.push("]");
 
-        for(var i = 2; i < toLog.length - 1; i += 2) {
+        for(var i = 1; i < toLog.length; i += 2) {
           toLog.splice(i, 0, ",");
         }
+
+        toLog.unshift("[");
+        toLog.push("]");
 
         if(!options.group) {
           if(tag != null) {
@@ -116,7 +118,7 @@
           console.dirxml(this);
         });
 
-        if(max < length) {
+        if(max !== length) {
           console.log( printf("(% more)", length - max) );
         }
       }
